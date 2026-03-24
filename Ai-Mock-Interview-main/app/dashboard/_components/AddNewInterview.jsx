@@ -45,13 +45,25 @@ const AddNewInterview = () => {
 `;
 
     const result = await chatSession.sendMessage(InputPrompt);
-    const MockJsonResp = result.response
-      .text()
-      .replace("```json", "")
-      .replace("```", "")
-      .trim();
-    console.log(JSON.parse(MockJsonResp));
+    // const MockJsonResp = result.response
+    //   .text()
+    //   .replace("```json", "")
+    //   .replace("```", "")
+    //   .trim();
+    // console.log(JSON.parse(MockJsonResp));
     // const parsedResp = MockJsonResp
+    const MockJsonResp = result.response
+  .text()
+  .replace(/```json/g, "")
+  .replace(/```/g, "")
+  .trim();
+
+// Extract only the JSON part
+const jsonMatch = MockJsonResp.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
+const cleanJson = jsonMatch ? jsonMatch[0] : MockJsonResp;
+
+console.log(JSON.parse(cleanJson));
+setJsonResponse(cleanJson);
     setJsonResponse(MockJsonResp);
 
     if (MockJsonResp) {
